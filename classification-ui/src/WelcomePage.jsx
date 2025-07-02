@@ -7,8 +7,8 @@ function WelcomePage() {
   return (
     <div style={{ textAlign: 'center', padding: '2rem' }}>
       <h1>Welcome to Classifications</h1>
-      <button onClick={() => navigate('/labels')} style={{ margin: '1rem', padding: '1rem' }}>View Labels</button>
-      <button onClick={() => navigate('/classifications')} style={{ margin: '1rem', padding: '1rem' }}>Manage Classifications</button>
+      <button onClick={() => navigate('/labels')} style={{ margin: '1rem', padding: '1rem' }}>Labels</button>
+      <button onClick={() => navigate('/classifications')} style={{ margin: '1rem', padding: '1rem' }}>Classifications</button>
     </div>
   );
 }

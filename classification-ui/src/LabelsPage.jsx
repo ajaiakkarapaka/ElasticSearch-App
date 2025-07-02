@@ -21,7 +21,8 @@ axios.get(`${BASE_URL}/api/classifications/label`)
       
   return (
     <div style={{ padding: '2rem' }}>
-      <h2>Classification Labels</h2>
+      <h1>CLASSIFICATION LABELS</h1>
+      <p>View available classification labels here.</p>
       <button onClick={() => navigate('/')}>🏠 Home</button>
       <p></p>
       <table border="1" cellPadding="8">

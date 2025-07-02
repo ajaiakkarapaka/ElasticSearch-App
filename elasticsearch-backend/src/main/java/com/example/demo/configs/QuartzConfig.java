@@ -17,7 +17,7 @@ public class QuartzConfig {
     @Autowired
     private ClassificationSyncService syncService;
 
-    @Scheduled(cron = "0 */5 * * * *") // Runs every 5 minutes
+    @Scheduled(cron = "0 */2 * * * *") // Runs every 2 minutes
     public void scheduleClassificationSync() {
         logger.info("Scheduled classification sync started.");
         try {
