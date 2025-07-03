@@ -17,15 +17,14 @@ public class QuartzConfig {
     @Autowired
     private ClassificationSyncService syncService;
 
-    @Scheduled(cron = "0 */2 * * * *") // Runs every 2 minutes
+    @Scheduled(cron = "0 0/5 * * * *") // Runs every 5 minute.
     public void scheduleClassificationSync() {
         logger.info("Scheduled classification sync started.");
         try {
             syncService.syncToElasticsearch();
             logger.info("Scheduled classification sync completed successfully.");
         } catch (Exception e) {
-            logger.error("Error occurred during scheduled classification sync.", e);
+            logger.error("Error occurred during scheduled classification sync.", e); throw e;
         }
     }
 }
-

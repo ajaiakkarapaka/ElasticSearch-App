@@ -2,9 +2,11 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.ClassificationEntity;
 import com.example.demo.models.ClassificationEntityDTO;
+import com.example.demo.models.ClassificationIndex;
 import com.example.demo.models.ClassificationLabels;
 import com.example.demo.repositories.ClassificationEntityRepository;
 import com.example.demo.repositories.ClassificationLabelsRepository;
+import com.example.demo.services.ClassificationSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +19,18 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.example.demo.services.ClassificationService;
 
-//HTTP Web API for managing classification labels and indices
+//HTTP Web API for managing classification labels and index.
 @RestController
 @RequestMapping("/api/classifications")
 @Tag(name = "Classification Management")
 public class ClassificationController {
-
     private static final Logger logger = LoggerFactory.getLogger(ClassificationController.class);
-
+    @Autowired
+    private ClassificationSearchService searchService;
+    @Autowired
+    private ClassificationService classificationService;
     @Autowired
     private ClassificationLabelsRepository labelRepo;
     @Autowired
@@ -43,7 +48,6 @@ public class ClassificationController {
             throw e;
         }
     }
-
     @GetMapping("/label/{labelName}")
     @Operation(summary = "Get a Classification Label by Name (read-only)")
     public ResponseEntity<ClassificationLabels> getLabelByName(@PathVariable String labelName) {
@@ -51,7 +55,7 @@ public class ClassificationController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    // === CRUD for INDEX ===
+    // === Create, Update and Delete methods for INDEX ===
     @PostMapping("/index")
     @Operation(summary = "Create Classification Index")
     public ClassificationEntity createIndex(@Valid @RequestBody ClassificationEntityDTO dto) {
@@ -70,21 +74,8 @@ public class ClassificationController {
         index.setModifiedBy(dto.getModifiedBy());
         index.setCreatedAt(LocalDateTime.now());
         index.setUpdatedAt(LocalDateTime.now());
+        classificationService.addClassification(index);
         return indexRepo.save(index);
-    }
-
-    @GetMapping("/index")
-    @Operation(summary = "Get all Classifications")
-    public List<ClassificationEntity> getAll() {
-        return indexRepo.findAll();
-    }
-
-    @GetMapping("/index/{id}")
-    @Operation(summary = "Get Classification by ID")
-    public ResponseEntity<ClassificationEntity> getIndexById(@PathVariable String id) {
-        return indexRepo.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/index/{id}")
@@ -96,6 +87,7 @@ public class ClassificationController {
             index.setApprovedBy(dto.getApprovedBy());
             index.setModifiedBy(dto.getModifiedBy());
             index.setUpdatedAt(LocalDateTime.now());
+            classificationService.updateClassification(index);
             return ResponseEntity.ok(indexRepo.save(index));
         }).orElse(ResponseEntity.notFound().build());
     }
@@ -103,16 +95,30 @@ public class ClassificationController {
     @DeleteMapping("/index/{id}")
     @Operation(summary = "Delete Classification")
     public ResponseEntity<Void> deleteIndex(@PathVariable String id) {
-        if (indexRepo.existsById(id)){
+        if (indexRepo.existsById(id)) {
             indexRepo.deleteById(id);
+            classificationService.deleteClassification(id);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
 
+    // === Read, Search & Display method from Elasticsearch ===
+    @GetMapping("/index")
+    @Operation(summary = "Get all Classifications from Elasticsearch")
+    public List<ClassificationIndex> getAllFromElasticsearch() {
+        return searchService.searchAll();
+    }
+    @GetMapping("/index/{id}")
+    @Operation(summary = "Get Classification by ID")
+    public ResponseEntity<ClassificationIndex> getIndexById(@PathVariable String id) {
+        return searchService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
     @GetMapping("/index/search")
-    public List<ClassificationEntity> searchIndices(@RequestParam("q") String query) {
-        return indexRepo.findByFieldNameContainingIgnoreCaseOrClassificationNameContainingIgnoreCaseOrApprovedByContainingIgnoreCase(query, query, query);
+    @Operation(summary = "Search Classification Index by Query")
+    public List<ClassificationIndex> searchIndex(@RequestParam("q") String query) {
+        return searchService.searchBy(query);
     }
-
-    }
+}

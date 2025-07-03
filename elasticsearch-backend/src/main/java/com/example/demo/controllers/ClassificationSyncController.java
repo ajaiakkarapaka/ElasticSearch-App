@@ -22,6 +22,7 @@ public class ClassificationSyncController {
 
     @PostMapping("/elasticsearch")
     public String manualSync() {
+        logger.info("Manual synchronization of classification data to Elasticsearch triggered.");
         syncService.syncToElasticsearch();
         return "Synchronisation triggered";
 

@@ -15,7 +15,7 @@ import java.util.UUID;
 public class DataSeeder implements CommandLineRunner {
 
     private final ClassificationLabelsRepository labelRepo;
-   // private final ClassificationsRepository indexRepo;
+   // private final ClassificationEntityRepository indexRepo;
 
     public DataSeeder(ClassificationLabelsRepository labelRepo, ClassificationEntityRepository indexRepo) {
         this.labelRepo = labelRepo;
@@ -44,5 +44,4 @@ public class DataSeeder implements CommandLineRunner {
             labelRepo.save(label);
         }
     }
-
 }

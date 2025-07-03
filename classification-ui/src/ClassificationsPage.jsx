@@ -95,7 +95,7 @@ const handleSearch = () => {
 
   return (
     <div style={{ padding: '2rem' }}>
-      <h2>Classifications</h2> <button onClick={() => navigate('/')}>🏠 Home</button>
+      <h1>CLASSIFICATIONS</h1> <button onClick={() => navigate('/')}>🏠 Home</button>
       <p></p>
       <button onClick={() => setShowForm(true)}>Add New</button>  {showForm && (
         <form onSubmit={handleSubmit} style={{ marginTop: '1rem' }}>
@@ -177,7 +177,7 @@ const handleSearch = () => {
           ))}
         </tbody>
       </table>
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={500} />
     </div>
   );
 }

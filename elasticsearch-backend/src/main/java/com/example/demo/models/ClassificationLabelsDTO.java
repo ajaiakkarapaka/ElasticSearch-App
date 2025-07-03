@@ -47,6 +47,4 @@ public class ClassificationLabelsDTO {
     public void setCreatedBy(@NotBlank(message = "Created by is mandatory") String createdBy) {
         this.createdBy = createdBy;
     }
-
-// Getters and setters omitted for brevity
 }

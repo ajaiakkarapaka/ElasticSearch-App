@@ -3,10 +3,11 @@ package com.example.demo.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-;
+
 
 //DB creation for Classification
 @Entity
+@Table(name = "classification_index")
 public class ClassificationEntity {
 
     @Id
