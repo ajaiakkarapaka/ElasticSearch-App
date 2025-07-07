@@ -1,0 +1,4 @@
+./target/
+# Eclipse project files
+.classpath
+.idea

@@ -25,8 +25,8 @@ import com.example.demo.services.ClassificationService;
 @RestController
 @RequestMapping("/api/classifications")
 @Tag(name = "Classification Management")
-public class ClassificationController {
-    private static final Logger logger = LoggerFactory.getLogger(ClassificationController.class);
+public class ClassificationIndexController {
+    private static final Logger logger = LoggerFactory.getLogger(ClassificationIndexController.class);
     @Autowired
     private ClassificationSearchService searchService;
     @Autowired
@@ -85,13 +85,15 @@ public class ClassificationController {
 
     // === Read, Search & Display method from Elasticsearch ===
     @GetMapping("/index")
-    @Operation(summary = "Get all Classifications from Elasticsearch")
+    @Operation(summary = "Get Classifications from Elasticsearch")
     public List<ClassificationIndex> getAllFromElasticsearch() {
+        logger.info("Fetching Classifications from Elasticsearch");
         return searchService.searchAll();
     }
     @GetMapping("/index/{id}")
     @Operation(summary = "Get Classification by ID")
     public ResponseEntity<ClassificationIndex> getIndexById(@PathVariable String id) {
+        logger.info("Fetching Classification with ID: {}", id);
         return searchService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -99,6 +101,7 @@ public class ClassificationController {
     @GetMapping("/index/search")
     @Operation(summary = "Search Classification Index by Query")
     public List<ClassificationIndex> searchIndex(@RequestParam("q") String query) {
+        logger.info("Searching Classification with query: {}", query);
         return searchService.searchBy(query);
     }
 }

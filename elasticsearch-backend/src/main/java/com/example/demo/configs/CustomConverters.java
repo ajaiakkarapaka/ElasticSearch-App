@@ -1,6 +1,5 @@
 package com.example.demo.configs;
 
-import com.example.demo.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -8,14 +7,13 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchCustomConversions;
 import org.springframework.lang.NonNull;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 
 @Configuration
-public class Converters {
+public class CustomConverters {
 
     @Bean
     public ElasticsearchCustomConversions elasticsearchCustomConversions() {

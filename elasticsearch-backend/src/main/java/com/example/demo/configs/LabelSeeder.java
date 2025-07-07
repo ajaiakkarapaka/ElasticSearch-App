@@ -2,6 +2,8 @@ package com.example.demo.configs;
 
 import com.example.demo.repositories.ClassificationLabelsRepository;
 import com.example.demo.models.ClassificationLabels;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
@@ -11,14 +13,13 @@ import java.util.UUID;
 //Data Initialization for Classification Labels only
 
 @Component
-public class DataSeeder implements CommandLineRunner {
+public class LabelSeeder implements CommandLineRunner {
+    private static final Logger logger = LoggerFactory.getLogger(LabelSeeder.class);
 
     private final ClassificationLabelsRepository labelRepo;
-   // private final ClassificationEntityRepository indexRepo;
 
-    public DataSeeder(ClassificationLabelsRepository labelRepo) {
+    public LabelSeeder(ClassificationLabelsRepository labelRepo) {
         this.labelRepo = labelRepo;
-        //this.indexRepo = indexRepo;
     }
 
     @Override
@@ -42,5 +43,6 @@ public class DataSeeder implements CommandLineRunner {
             label.setUpdatedAt(LocalDateTime.now());
             labelRepo.save(label);
         }
+        logger.info("Label created in Elasticsearch index: {}", persistentData);
     }
 }
